@@ -1,35 +1,26 @@
-name: Rust
+# .github/workflows/build.yml
+name: Build
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
-env:
-  CARGO_TERM_COLOR: always
+    branches: [main]
 
 jobs:
-  build-and-deploy:
-
+  build:
+    name: Build
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
-    - name: release
-      uses: manoadamro/rust-release@v1
-      with:
-    # Github Repo Owner
-        owner: ${{ github.repository_owner }}
-    # Github Repo
-        repo: ${{ github.repository }}
-    # Github Token
-        token: ${{ secrets.GITHUB_TOKEN }}
-    # Cargo.toml path
-        cargo: Cargo.toml
-    # do not actually create release
-        dry_run: false
+      - uses: actions/checkout@master
+      - name: Compile
+        id: compile
+        uses: rust-build/rust-build.action@v1.4.5
+        with:
+          RUSTTARGET: x86_64-unknown-linux-musl
+          UPLOAD_MODE: release
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Binary
+          path: |
+            ${{ steps.compile.outputs.BUILT_ARCHIVE }}
+            ${{ steps.compile.outputs.BUILT_CHECKSUM }}
