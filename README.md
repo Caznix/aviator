@@ -8,7 +8,7 @@
 
 # Aviator
 
-Aviator is a general purpose discord bot built using [https://github.com/serenity-rs/serenity](Serrenity), [https://github.com/serenity-rs/poise](Poise), and [https://github.com/clap-rs/clap](Clap).
+Aviator is a general purpose discord bot built using [Sereniy](https://github.com/serenity-rs/serenity), [Poise](https://github.com/serenity-rs/poise), and [Clap](https://github.com/clap-rs/clap). Built specifically for the Nonsensical Dev discord
 
 <div align="center">
 
