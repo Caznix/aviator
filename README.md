@@ -3,7 +3,7 @@
 
 [![Rust](https://github.com/Nonsensical-dev/aviator/workflows/Rust/badge.svg)](https://github.com/Nonsensical-dev/aviator/actions?query=workflow:"Rust")
 [![GitHub tag](https://img.shields.io/github/tag/Nonsensical-dev/aviator?include_prereleases=&sort=semver&color=blue)](https://github.com/Nonsensical-dev/aviator/releases/)
-[![License](https://img.shields.io/badge/License-MIT-blue)](#license)
+[![License](https://img.shields.io/badge/License-MPL-blue)](#license)
 [![issues - aviator](https://img.shields.io/github/issues/Nonsensical-dev/aviator)](https://github.com/Nonsensical-dev/aviator/issues)
 
 # Aviator
