@@ -25,5 +25,5 @@ jobs:
       with:
         name: Binary
         path: |
-          ${{ steps.Buid.outputs.BUILT_ARCHIVE }}
-          ${{ steps.Buid.outputs.BUILT_CHECKSUM }}
+          /home/runner/work/aviator/aviator/target/debug/aviator.exe
+
