@@ -1,10 +1,25 @@
+
 use poise::serenity_prelude as serenity;
+use ::serenity::json::NULL;
 use tokio;
 
+use std::path::PathBuf;
+
+use clap::Parser;
+
+#[derive(Parser)]
+#[command(version, about, long_about = None)]
+struct Cli {
+    #[arg(short, long, value_name = "FILE")]
+    config: Option<PathBuf>,
+
+    #[arg(short, long,)]
+    debug: Option<bool>
+
+}
 struct Data {} // User data, which is stored and accessible in all command invocations
 type Error = Box<dyn std::error::Error + Send + Sync>;
 type Context<'a> = poise::Context<'a, Data, Error>;
-
 /// Displays your or another user's account creation date
 #[poise::command(slash_command, prefix_command)]
 async fn age(
@@ -23,17 +38,34 @@ async fn quit(
     ctx: Context<'_>,
     #[description = "Make the bot quit"] reason: Option<String>
 ) -> Result<(), Error> {
+    let can_quit: String = std::env::var("AVIATOR_DEBUG").expect("");
     let default: String = "No reason specified".to_string();
     let r: String = reason.unwrap_or_else(||default);
-    let text: String = format!("Terminating bot. Quitting for: {r}");
-    ctx.say(text).await?;
-    std::process::exit(0);
-    Ok(())
-}
+    if can_quit == "TRUE" && can_quit != NULL {
+        let text: String = format!("Terminating bot. Quitting for: {r}");
+        ctx.say(text).await?;
+        std::process::exit(0);
+        } else {
+            let text: String = format!("Quit command not enabled. add AVIATOR_MODE=TRUE before your startup command");
+            ctx.say(text).await?;
+            Ok(())
+        }
+    }
 
-fn main() {
-    main_run()
-}
+    fn main() {
+        let cli = Cli::parse();
+        match cli.debug {
+            Some(..) => {
+                std::env::set_var("AVIATOR_DEBUG", "TRUE");
+                print!("Debug mode enabled")
+            },
+            None => {
+                std::env::set_var("AVIATOR_DEBUG", "FALSE")
+            }
+        }
+        main_run()
+    }
+
 
 #[tokio::main]
 async fn main_run() {
