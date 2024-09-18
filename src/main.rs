@@ -2,21 +2,19 @@
 use poise::serenity_prelude as serenity;
 use ::serenity::json::NULL;
 use tokio;
+use util::Verifiy;
 
-use std::{alloc::System, path::PathBuf};
 
 use clap::Parser;
 
 use sysinfo::System as OtherSystem;
-// Please note that we use "new_all" to ensure that all lists of
-// CPUs and processes are filled!
+// replace this later
 
+pub mod util;
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
 
 struct Cli {
-    #[arg(short, long, value_name = "FILE")]
-    config: Option<PathBuf>,
 
     #[arg(short, long,)]
     debug: Option<bool>
@@ -72,6 +70,16 @@ Current Memory usage is {:?}MB",host_name,can_quit,mem_usage);
     Ok(())
 }
 
+#[poise::command(slash_command, prefix_command)]
+async fn echo(
+    ctx: Context<'_>,
+    #[description = "Make the bot quit"] input_msg: String
+    ) -> Result<(), Error> {
+    let input_msg = format!("{:#?}",input_msg).verify().unwrap();
+    ctx.reply(input_msg).await?;
+    Ok(())
+}
+
     fn main() {
         let cli = Cli::parse();
         match cli.debug {
@@ -94,7 +102,7 @@ async fn main_run() {
 
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
-            commands: vec![age(),quit(),get_env()],
+            commands: vec![age(),quit(),get_env(),echo()],
             ..Default::default()
         })
         .setup(|ctx, _ready, framework| {
